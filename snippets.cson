@@ -1,0 +1,72 @@
+'.source.elm':
+  forwardUpdate:
+    prefix: 'forU'
+    body: '''
+        ( $1Msg subMsg, $1Model subModel ) ->
+            $1.update subMsg subModel
+                |> mapBoth $1Msg $1Model
+          '''
+  forwardInit:
+    prefix: 'forI'
+    body: '''
+        $1 ->
+            singleton <| $1Model $1.init
+          '''
+
+  forwardView:
+    prefix: 'forV'
+    body: '''
+       $1Model model ->
+          $1.view model |> Html.map $1Msg
+          '''
+
+  forwardRoute:
+    prefix: 'forR'
+    body: '''
+        $1 subroute ->
+            Hop.matcherToPath $2Match []
+                ++ $1.url subroute
+          '''
+
+  decendMsg:
+    prefix: 'decMsg'
+    body: '$1Msg $1.Msg'
+
+  decendModel:
+    prefix: 'decModel'
+    body: '$1Model $1.Model'
+
+  decend:
+    prefix: 'dec'
+    body: '$1$2 $1.$2'
+
+  pathMatcherCommon:
+    prefix: 'path'
+    body: '''
+      $1Match : PathMatcher Route
+      $1Match =
+        Match.match1 $2 "/$1"
+          '''
+
+  importWithType:
+    prefix: 'importT'
+    body: 'import $1 exposing ($1)'
+
+  importWithEverything:
+    prefix: 'importE'
+    body: 'import $1 exposing (..)'
+
+  importAs:
+    prefix: 'importA'
+    body: 'import $1.$2 as $2'
+
+  focus:
+    prefix: 'focus'
+    body: '''
+      $1_ : Focus $2 $3
+      $1_ = Focus.create .$1 (\f big -> { big | $1 = f big.$1 })
+          '''
+
+  module:
+    prefix: 'module'
+    body: 'module $1 exposing (..)'
